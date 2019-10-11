@@ -7,6 +7,7 @@ Libraries that will be used and therefore need to be installed (continually upda
 - numpy
 - scipy
 - pyvisa-py
+- matplotlib
 
 To install these packages, using terminal/cmd:
 - pip install <library>
