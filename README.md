@@ -6,7 +6,7 @@ Available here: https://www.python.org/downloads/release/python-374/
 Libraries that will be used and therefore need to be installed (continually updated list):
 - numpy
 - scipy
-- pyvisa-py
+- pyvisa
 - matplotlib
 
 To install these packages, using terminal/cmd:
