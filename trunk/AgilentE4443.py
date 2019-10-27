@@ -1,5 +1,6 @@
 # Agilent Spectrum Analyzer Handler - Supports E4443A
 from VisaHandler import Visa_Device
+import matplotlib.pyplot as plt
 
 class SpectrumAnalyzer(Visa_Device):
     """ Creates Visa_Device SpectrumAnalyzer """
@@ -85,7 +86,7 @@ class SpectrumAnalyzer(Visa_Device):
     def get_reference_level(self):
         """ Gets the reference level of the SA """
         ref_level = self.query("DISP:WIND:TRAC:Y:RLEV?")
-        self.get_num(ref_level)
+        return self.get_num(ref_level)
 
     def set_reference_level(self, ref_level:(int, float)=0):
         """ Sets the reference level of the SA, defaults to 0db """
@@ -114,4 +115,68 @@ class SpectrumAnalyzer(Visa_Device):
             print("Invalide mode: {0}, please use one of {1}".format(mode, supported_modes))
             return 1
         self.write("CALC:MARK:PEAK:SEARC:MODE {0}".format(mode.upper()))
+
+    def set_data_format(self, fmt:str="ASC"):
+        """ sets output data format, default is ascii <ASC> """
+        valid_formats = ["ASC"]
+        if fmt not in valid_formats:
+            print("Invalid data format: {0}".format(fmt))
+            return 1
+        self.write("FORM:DATA: {0}".format(fmt))
+    
+    def set_sweep_mode(self, mode:str="single"):
+        """ Sets the SA to single sweep mode """
+        modes = ["single", "sin", "0", 0, "continuous", "cont", "1", 1]
+        if mode not in modes:
+            print("Invalid sweep mode: {0}, please try any of: {1}".format(mode, modes))
+            return 1
+        elif mode in modes[:4]:
+            mode = 0
+        elif mode in modes[4:]:
+            mode = 1
+        self.write("INIT:CONT {0}".format(mode))
+
+    def get_point_count(self):
+        """ Returns the number of points of the sweep """
+        points = self.query("SENS:SWE:POIN?")
+        return self.get_num(points)
+
+
+    def get_freq_points(self):
+        """ Returns a list of freq points that are being sampled """
+        span = self.get_freq_span()
+        points = self.get_point_count()
+        start_freq = self.get_start_freq()
+        stop_freq = self.get_stop_freq()
+        freq_values = []
+        freq_step = span/points
+        for freq in range(int(points)):
+            freq_values.append(start_freq + freq*freq_step)
+        return freq_values
+
+
+    def get_sweep_data(self, trace:int=1):
+        """ Gets the current sweep data """
+        self.set_sweep_mode("single")
+        sweep = self.query("TRAC:DATA? TRACE{0}".format(trace))
+        y_values = []
+        for value in sweep.split(","):
+            y_values.append(self.get_num(value))
+        x_values = self.get_freq_points()
+        self.set_sweep_mode("continuous")
+        return [x_values, y_values]
+
+    def plot_sweep_data(self, data, label:str=None, title:str="Single Sweep"):
+        """ Displays a plot of the sweep data """
+        if label is None:
+            label = self.idn
+        x = data[0]
+        y = data[1]
+        plt.plot(x, y, label=label)
+        plt.xlabel("Freq")
+        plt.ylabel("dBm")
+        plt.title(title)
+        plt.legend()
+        plt.ion() #plot.show(block=False)
+
     
