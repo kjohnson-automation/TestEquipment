@@ -147,7 +147,6 @@ class SpectrumAnalyzer(Visa_Device):
         span = self.get_freq_span()
         points = self.get_point_count()
         start_freq = self.get_start_freq()
-        stop_freq = self.get_stop_freq()
         freq_values = []
         freq_step = span/points
         for freq in range(int(points)):
@@ -177,6 +176,5 @@ class SpectrumAnalyzer(Visa_Device):
         plt.ylabel("dBm")
         plt.title(title)
         plt.legend()
-        plt.ion() #plot.show(block=False)
-
+        plt.ion()
     
