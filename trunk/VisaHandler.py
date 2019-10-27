@@ -14,16 +14,18 @@ class Visa_Device():
     def __init__(self, gpib_address):
         """ Creates the initial connection and checks settings before proceeding """
         global RM, AVAILABLE_RESOURCES
-        index = None
+        resource = None
+
         for resource in AVAILABLE_RESOURCES:
             if "::{gpib_address}::".format(gpib_address=gpib_address)  in resource:
-                index = AVAILABLE_RESOURCES.index(resource)
-        if index is None:
+                self.resource = resource
+                break
+        if resource is None:
             # TODO: Logging will be added later
             # logger.warning("Resource not found, please check connections and try again")
             print("Resource not found, please check connections and try again")
         else:
-            self.device = RM.open_resource(AVAILABLE_RESOURCES[index])
+            self.device = RM.open_resource(self.resource)
             self.get_idn()
 
     def query(self, cmd):
