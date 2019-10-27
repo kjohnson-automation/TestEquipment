@@ -3,6 +3,7 @@ Library of test equipment handlers.
 
 Language: Python 3.7.x (Current working version 3.7.4)
 Available [here](https://www.python.org/downloads/release/python-374/)
+
 Libraries that will be used and therefore need to be installed (continually updated list):
 - numpy
 - scipy
