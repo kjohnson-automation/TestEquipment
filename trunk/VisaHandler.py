@@ -1,12 +1,12 @@
 # This is the base controller for VISA based devices.
 # From here all subClasses of VISA devices will inhereit base functionality to increase productivity and add features
 
-
 import os, sys, visa
 # import logging
 
 RM = visa.ResourceManager()
 AVAILABLE_RESOURCES = RM.list_resources()
+
 
 class Visa_Device():
     """ Base class for VISA device communications """
@@ -14,6 +14,7 @@ class Visa_Device():
     def __init__(self, gpib_address):
         """ Creates the initial connection and checks settings before proceeding """
         global RM, AVAILABLE_RESOURCES
+        self.FREQ_PREFIXES = {"ghz": 1e9, "mhz": 1e6, "khz": 1e3, "hz": 1e0}
         resource = None
 
         for resource in AVAILABLE_RESOURCES:
@@ -56,7 +57,7 @@ class Visa_Device():
         try:
             return self.device.read()
         except visa.VisaIOError:
-            # Not worth logging anything as this could happen a bit
+            # Not worth logging anything as this could happen often
             return 0
 
     def flush_buffer(self):
@@ -92,3 +93,27 @@ class Visa_Device():
         self.device.close()
         print("Device disconnected")
         return 0
+
+    def prefix_check(self, prefix):
+        """ checks the given prefix """
+        if (not isinstance(prefix, str)) or (prefix.lower() not in self.FREQ_PREFIXES.keys()):
+            print("Prefix not of valid, please use one of: {0}".format(self.FREQ_PREFIXES))
+            return 1
+        return prefix
+
+    def set_num_freq(self, freq, prefix):
+        """ Returns Hz value of <freq> given <prefix> """
+        prefix = self.prefix_check(prefix)
+        if prefix != 1:
+            return freq * self.FREQ_PREFIXES[prefix.lower()]
+        else:
+            print("Cannot convert specified freq: {0} with prefix: {1}".format(freq, prefix))
+            return None
+
+    def get_num(self, num:str):
+        """ Returns the <(int, float)> of freq value """
+        try:
+            return float(num)
+        except ValueError:
+            return num
+    

@@ -4,7 +4,6 @@ import numpy as np
 from VisaHandler import Visa_Device
 
 MAX_POWER = 10
-FREQ_PREFIXES = {"ghz": 1e9, "mhz": 1e6, "khz": 1e3, "hz": 1e0}
 POWER_UNITS = ["dbm", "db"] # more can be added but I think these are the common ones
 
 class SignalGenerator(Visa_Device):
@@ -14,23 +13,14 @@ class SignalGenerator(Visa_Device):
         """ Creates the actual device """
         super().__init__(gpib_address)
 
-    def prefix_check(self, prefix):
-        """ checks the given prefix """
-        global FREQ_PREFIXES
-        if (not isinstance(prefix, str)) or (prefix.lower() not in FREQ_PREFIXES.keys()):
-            print("Prefix not of valid, please use one of: {0}".format(FREQ_PREFIXES))
-            return 1
-        return prefix
-
     def convert_frequency(self, raw_freq:str, prefix:str):
         """ Converts string rsp frequency to int with base prefix """
-        global FREQ_PREFIXES
         try:
             hz = float(raw_freq)
         except ValueError:
             print("Can't handle {0} yet...".format(raw_freq))
             return raw_freq
-        return hz/FREQ_PREFIXES[prefix.lower()]
+        return hz/self.FREQ_PREFIXES[prefix.lower()]
 
 
     def get_frequency(self, prefix:str="ghz"):
