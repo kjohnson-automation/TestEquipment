@@ -123,7 +123,7 @@ class SpectrumAnalyzer(Visa_Device):
             print("Invalid data format: {0}".format(fmt))
             return 1
         self.write("FORM:DATA: {0}".format(fmt))
-    
+
     def set_sweep_mode(self, mode:str="single"):
         """ Sets the SA to single sweep mode """
         modes = ["single", "sin", "0", 0, "continuous", "cont", "1", 1]
@@ -177,4 +177,3 @@ class SpectrumAnalyzer(Visa_Device):
         plt.title(title)
         plt.legend()
         plt.ion()
-    

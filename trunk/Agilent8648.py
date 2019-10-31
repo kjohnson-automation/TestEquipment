@@ -13,7 +13,7 @@ class SignalGenerator(Visa_Device):
         """ Creates the actual device """
         super().__init__(gpib_address)
 
-    def convert_frequency(self, raw_freq:str, prefix:str):
+    def convert_frequency(self, raw_freq: str, prefix: str):
         """ Converts string rsp frequency to int with base prefix """
         try:
             hz = float(raw_freq)
@@ -35,7 +35,7 @@ class SignalGenerator(Visa_Device):
             return 1
         raw_freq = self.query("FREQ?")
         return self.convert_frequency(raw_freq, prefix)
-    
+
     def set_frequency(self, freq:(float, int), prefix:str="ghz"):
         """ Sets the signal generator to the specified frequency with prefix <prefix>
             If no prefix is given, assumed GHz
@@ -43,12 +43,12 @@ class SignalGenerator(Visa_Device):
         return self.write("FREQ:CW {0} {1}".format(freq, prefix))
 
     def get_output_state(self):
-        """ Checks to see if RF is enabled/disabled 
+        """ Checks to see if RF is enabled/disabled
             1: On
             0: Off
         """
         return self.query("OUTP:STAT?")
-    
+
     def set_output_state(self, target:bool):
         """ Sets the output to <target>:
             False: Off
@@ -87,4 +87,4 @@ class SignalGenerator(Visa_Device):
             return 1
         return self.write("POW:AMPL {0} {1}".format(power, unit))
 
-    
+
