@@ -116,4 +116,11 @@ class LimiterTest():
                 self.disable_signal_output()
 
 
+def main():
+    """ Main routine that starts the testing """
+    test = LimiterTest(19, 21, 18, "test.csv")
+    print("Starting OIP3 Test")
+    test.test_OIP3()
 
+if __name__=="__main__":
+    main()
