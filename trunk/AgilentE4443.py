@@ -182,6 +182,11 @@ class SpectrumAnalyzer(Visa_Device):
         """ Sets the resolution bandwidth on the spectrum analyzer """
         return self.write("BAND:BWID:RES {0}".format(res_bw))
 
+    def auto_res_bw(self, toggle:bool=True):
+        """ Toggles the auto resolution bandwidth feature - 
+            accepts <True>/<False>
+        """
+        return self.write("BAND:BWID:RES:AUTO {0}".format(toggle))
 
     def get_video_bw(self):
         """ Gets the video bandwidth from the spectrum analyzer """
@@ -191,3 +196,9 @@ class SpectrumAnalyzer(Visa_Device):
     def set_video_bw(self, video_bw):
         """ Sets the video bandwidth on the spectrum analyzer """
         return self.write("BAND:BWID:VID {0}".format(video_bw))
+
+    def auto_video_bw(self, toggle:bool=True):
+        """ Toggles the auto video bandwidth feature - 
+            accepts <True>/<False>
+        """
+        return self.write("BAND:BWID:VID:AUTO {0}".format(toggle))

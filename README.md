@@ -20,6 +20,7 @@ Current supported library with explicit functionality:
 - Agilent 8648; Signal Generator
 
 Current library also supports any base visa device through VisaHandler
+There is currently a base test for testing limiters included.
 
 Examples:
 ```python
