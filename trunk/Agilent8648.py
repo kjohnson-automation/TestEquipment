@@ -68,8 +68,7 @@ class SignalGenerator(Visa_Device):
                 else:
                     print("Cannot interpret target output status: {0}, try True/False".format(target))
                     return 1
-        self.write("OUTP:STAT {0}".format(int(target)))
-        return 0
+        return self.write("OUTP:STAT {0}".format(int(target)))
 
     def get_power(self):
         """ Returns the CW power in dBm """

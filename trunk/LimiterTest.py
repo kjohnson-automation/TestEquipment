@@ -89,6 +89,7 @@ class LimiterTest():
 
         # Diables siggen outputs before setting things - just in case
         self.disable_signal_output()
+        self.spec_analyzer.set_reference_level(0)
         for freq_pair in self.frequency_pairs:
             for power in self.power_levels:
                 print("Testing frequencies: {0} - {1}".format(
@@ -114,7 +115,9 @@ class LimiterTest():
                         freq_pair[1], power)
                 self.spec_analyzer.plot_sweep_data([x,y], label)
                 self.disable_signal_output()
-
+        print("Testing Complete")
+        print("Data File: {0}".format(self.write_file))
+        self.close_file()
 
 def main():
     """ Main routine that starts the testing """

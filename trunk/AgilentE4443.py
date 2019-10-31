@@ -18,11 +18,10 @@ class SpectrumAnalyzer(Visa_Device):
         """ Sets the start frequency of sweep """
         out_freq = self.set_num_freq(freq, prefix)
         if out_freq is not None:
-            self.write("FREQ:START {0}".format(out_freq))
+            return self.write("FREQ:START {0}".format(out_freq))
         else:
             print("Start Freq not set, invalid settings")
             return 1
-        return 0
 
     def get_stop_freq(self):
         """ Gets the stop frequency of sweep """
@@ -33,11 +32,10 @@ class SpectrumAnalyzer(Visa_Device):
         """ Sets the stop frequency of sweep """
         out_freq = self.set_num_freq(freq, prefix)
         if out_freq is not None:
-            self.write("FREQ:STOP {0}".format(out_freq))
+            return self.write("FREQ:STOP {0}".format(out_freq))
         else:
             print("Stop Freq not set, invalid settings")
             return 1
-        return 0
 
     def get_freq_span(self):
         """ Gets the span of frequency sweep """
@@ -48,11 +46,10 @@ class SpectrumAnalyzer(Visa_Device):
         """ Sets the sweep span bandwidth """
         out_freq = self.set_num_freq(freq, prefix)
         if out_freq is not None:
-            self.write("FREQ:SPAN {0}".format(out_freq))
+            return self.write("FREQ:SPAN {0}".format(out_freq))
         else:
             print("Freq Span not set, invalid settings")
             return 1
-        return 0
 
     def get_center_freq(self):
         """ Gets the center frequency of sweep """
@@ -63,11 +60,10 @@ class SpectrumAnalyzer(Visa_Device):
         """ Sets the center frequency of the sweep """
         out_freq = self.set_num_freq(freq, prefix)
         if out_freq is not None:
-            self.write("FREQ:CENT {0}".format(out_freq))
+            return self.write("FREQ:CENT {0}".format(out_freq))
         else:
             print("Center Freq not set, invalid settings")
             return 1
-        return 0
 
     def get_attenuation(self):
         """ Returns the SA attenuation """
@@ -77,11 +73,10 @@ class SpectrumAnalyzer(Visa_Device):
     def set_attenuation(self, atten:(int,float)=0):
         """ Sets the SA attenuation """
         if 0 <= atten <= 70:
-            self.write("POW:ATT {0}".format(atten))
+            return self.write("POW:ATT {0}".format(atten))
         else:
             print("Selected Attenuation out of range: {0}".format(atten))
             return 1
-        return 0
 
     def get_reference_level(self):
         """ Gets the reference level of the SA """
@@ -96,8 +91,7 @@ class SpectrumAnalyzer(Visa_Device):
             except ValueError:
                 print("Invalid reference level selected: {0}".format(ref_level))
                 return 1
-        self.write("DISP:WIND:TRAC:Y:RLEV {0}".format(ref_level))
-        return 0
+        return self.write("DISP:WIND:TRAC:Y:RLEV {0}".format(ref_level))
 
     # NOTE: doesn't work yet
     def get_marker_peak(self, marker_num:int=1):
@@ -114,7 +108,7 @@ class SpectrumAnalyzer(Visa_Device):
         if mode.upper() not in supported_modes:
             print("Invalide mode: {0}, please use one of {1}".format(mode, supported_modes))
             return 1
-        self.write("CALC:MARK:PEAK:SEARC:MODE {0}".format(mode.upper()))
+        return self.write("CALC:MARK:PEAK:SEARC:MODE {0}".format(mode.upper()))
 
     def set_data_format(self, fmt:str="ASC"):
         """ sets output data format, default is ascii <ASC> """
@@ -122,7 +116,7 @@ class SpectrumAnalyzer(Visa_Device):
         if fmt not in valid_formats:
             print("Invalid data format: {0}".format(fmt))
             return 1
-        self.write("FORM:DATA: {0}".format(fmt))
+        return self.write("FORM:DATA: {0}".format(fmt))
 
     def set_sweep_mode(self, mode:str="single"):
         """ Sets the SA to single sweep mode """
@@ -134,13 +128,12 @@ class SpectrumAnalyzer(Visa_Device):
             mode = 0
         elif mode in modes[4:]:
             mode = 1
-        self.write("INIT:CONT {0}".format(mode))
+        return self.write("INIT:CONT {0}".format(mode))
 
     def get_point_count(self):
         """ Returns the number of points of the sweep """
         points = self.query("SENS:SWE:POIN?")
         return self.get_num(points)
-
 
     def get_freq_points(self):
         """ Returns a list of freq points that are being sampled """
@@ -153,11 +146,12 @@ class SpectrumAnalyzer(Visa_Device):
             freq_values.append(start_freq + freq*freq_step)
         return freq_values
 
-
     def get_sweep_data(self, trace:int=1):
         """ Gets the current sweep data """
         self.set_sweep_mode("single")
+        self.wait()
         sweep = self.query("TRAC:DATA? TRACE{0}".format(trace))
+        self.wait()
         y_values = []
         for value in sweep.split(","):
             y_values.append(self.get_num(value))
@@ -177,3 +171,23 @@ class SpectrumAnalyzer(Visa_Device):
         plt.title(title)
         plt.legend()
         plt.ion()
+
+    def get_res_bw(self):
+        """ Gets the resolution bandwidth from the spectrum analyzer """
+        # [:SENSe]:BANDwidth|BWIDth[:RESolution]?
+        res_bw = self.query("BAND:BWID:RES?")
+        return res_bw
+
+    def set_res_bw(self, res_bw):
+        """ Sets the resolution bandwidth on the spectrum analyzer """
+        return self.write("BAND:BWID:RES {0}".format(res_bw))
+
+
+    def get_video_bw(self):
+        """ Gets the video bandwidth from the spectrum analyzer """
+        # [:SENSe]:BANDwidth|BWIDth:VIDeo
+        self.query("BAND:BWID:VID?")
+
+    def set_video_bw(self, video_bw):
+        """ Sets the video bandwidth on the spectrum analyzer """
+        return self.write("BAND:BWID:VID {0}".format(video_bw))
