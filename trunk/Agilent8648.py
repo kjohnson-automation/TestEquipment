@@ -3,7 +3,7 @@ import re
 import numpy as np
 from VisaHandler import Visa_Device
 
-MAX_POWER = 10
+MAX_POWER = 20
 POWER_UNITS = ["dbm", "db"] # more can be added but I think these are the common ones
 
 class SignalGenerator(Visa_Device):
@@ -82,7 +82,7 @@ class SignalGenerator(Visa_Device):
             return 1
         # TODO: EDIT FOR proper checking
         if float(power) > MAX_POWER:
-            print("POWER TOOOOOO HIGH: EXITING")
+            print("POWER TOO HIGH: EXITING")
             return 1
         return self.write("POW:AMPL {0} {1}".format(power, unit))
 

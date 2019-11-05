@@ -1,4 +1,5 @@
 # Agilent Spectrum Analyzer Handler - Supports E4443A
+import time
 from VisaHandler import Visa_Device
 import matplotlib.pyplot as plt
 
@@ -166,11 +167,14 @@ class SpectrumAnalyzer(Visa_Device):
         x = data[0]
         y = data[1]
         plt.plot(x, y, label=label)
+        plt.draw()
         plt.xlabel("Freq")
         plt.ylabel("dBm")
         plt.title(title)
         plt.legend()
         plt.ion()
+        plt.show()
+        time.sleep(0.001)
 
     def get_res_bw(self):
         """ Gets the resolution bandwidth from the spectrum analyzer """

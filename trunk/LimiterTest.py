@@ -24,6 +24,7 @@ class LimiterTest():
         if output_file is None:
             now = datetime.now().strftime("%m%d%Y_%H%M")
             output_file = "Limiter_test{0}.csv".format(now)
+            print("Creating Write file: {0}".format(output_file))
             self.write_file = open(output_file, "w")
         self.siggen1 = SignalGenerator(siggen1_gpib)
         self.siggen2 = SignalGenerator(siggen2_gpib)
@@ -40,8 +41,8 @@ class LimiterTest():
             Line 1: x
             Line 2: y
         """
-        self.write_file.write(data[0])
-        self.write_file.write(data[1])
+        self.write_file.write("{0}\n".format(",".join(map(str, data[0]))))
+        self.write_file.write("{0}\n\n".format(",".join(map(str, data[1]))))
 
     def disable_signal_output(self):
         """ Turns off both signal generator outputs """
@@ -114,14 +115,16 @@ class LimiterTest():
                 label = "{0}-{1} @ {2}dBm".format(freq_pair[0],
                         freq_pair[1], power)
                 self.spec_analyzer.plot_sweep_data([x,y], label)
+                # _ = input("PAUSE")
                 self.disable_signal_output()
         print("Testing Complete")
         print("Data File: {0}".format(self.write_file))
         self.close_file()
+        _ = input("Any Key To Continue...")
 
 def main():
     """ Main routine that starts the testing """
-    test = LimiterTest(19, 21, 18, "test.csv")
+    test = LimiterTest(19, 21, 18)
     print("Starting OIP3 Test")
     test.test_OIP3()
 
