@@ -29,8 +29,19 @@ class LimiterTest():
         self.siggen1 = SignalGenerator(siggen1_gpib)
         self.siggen2 = SignalGenerator(siggen2_gpib)
         self.spec_analyzer = SpectrumAnalyzer(sa_gpib)
+        # edit_freq = input("Do you want to change the frequenices? (Y/N)")
+        # if "y" in edit_freq.lower():
+        #     self.frequency_pairs = []
+        #     response = ""
+        #     while "n" not in response:
+        #         response = input("Input frequency pairs - enter \"n\" to stop").split(",")
+        #         self.frequency_pairs.append(response)
+        # else:
+
+        #### NOTE: EDIT FREQUENCIES HERE - FREQUENCIES IN GHz! ####
         self.frequency_pairs = [[2.395, 2.405], [2.995, 3.005]]
         self.power_levels = [-10, -5, 0, 5, 10, 15]
+        ############################################################
 
     def close_file(self):
         """ Closes write file """
@@ -78,8 +89,8 @@ class LimiterTest():
             attenuation but this is not handled yet
         """
         # Frequencies +/- 100MHz since default unit is GHz
-        start_fail = self.spec_analyzer.set_start_freq(freq_pair[0]-.1)
-        stop_fail = self.spec_analyzer.set_stop_freq(freq_pair[1]+.1)
+        start_fail = self.spec_analyzer.set_start_freq(freq_pair[0]-.05)
+        stop_fail = self.spec_analyzer.set_stop_freq(freq_pair[1]+.05)
         return any([start_fail, stop_fail])
 
     def test_OIP3(self):
@@ -115,7 +126,6 @@ class LimiterTest():
                 label = "{0}-{1} @ {2}dBm".format(freq_pair[0],
                         freq_pair[1], power)
                 self.spec_analyzer.plot_sweep_data([x,y], label)
-                # _ = input("PAUSE")
                 self.disable_signal_output()
         print("Testing Complete")
         print("Data File: {0}".format(self.write_file))
