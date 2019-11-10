@@ -116,4 +116,22 @@ class Visa_Device():
             return float(num)
         except ValueError:
             return num
+
+    def _conversion(self, conv):
+        """ This is a base convsersion routine that takes bool/str (on/off) and returns int(0/1) """
+        if isinstance(conv, int):
+            return conv
+        if isinstance(conv, bool):
+            return int(conv)
+        elif isinstance(conv, str):
+            if conv.lower() == "off":
+                return 0
+            elif conv.lower() == "on":
+                return 1
+        else:
+            try:
+                return int(conv)
+            except ValueError:
+                print("Invalid Conversion of {0} to int".format(conv))
+                return "NaN"
     

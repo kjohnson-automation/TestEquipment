@@ -1,6 +1,7 @@
 # Signal Generator 8648/C Handler
 import re
 import numpy as np
+#pylint: disable=import-error
 from VisaHandler import Visa_Device
 
 MAX_POWER = 20
