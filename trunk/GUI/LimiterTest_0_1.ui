@@ -102,7 +102,11 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <widget class="QLineEdit" name="e_SigGenGPIB"/>
+         <widget class="QLineEdit" name="e_SigGenGPIB">
+          <property name="text">
+           <string>19</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLineEdit" name="e_startFreq"/>
@@ -215,7 +219,11 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
-         <widget class="QLineEdit" name="e_SigGenGPIB_2"/>
+         <widget class="QLineEdit" name="e_SigGenGPIB_2">
+          <property name="text">
+           <string>21</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLineEdit" name="e_startFreq_2"/>
@@ -377,7 +385,11 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
-         <widget class="QLineEdit" name="e_psuGPIB"/>
+         <widget class="QLineEdit" name="e_psuGPIB">
+          <property name="text">
+           <string>6</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLineEdit" name="e_psuStartV"/>
@@ -536,7 +548,11 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_10">
         <item>
-         <widget class="QLineEdit" name="e_specAnalyzerGPIB"/>
+         <widget class="QLineEdit" name="e_specAnalyzerGPIB">
+          <property name="text">
+           <string>18</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLineEdit" name="e_videoBW"/>
@@ -592,7 +608,7 @@
      <x>0</x>
      <y>0</y>
      <width>1579</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuLimiter_Test_Gui">
