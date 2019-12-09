@@ -2,10 +2,13 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow
 from PyQt5 import QtCore, QtGui
-from gui.LimiterTest_0_2 import Ui_LimiterTest
+from GUI.LimiterTest_0_2 import Ui_LimiterTest
 
 import Agilent8648, AgilentE36XX, AgilentE4443
 import LimiterTest
+
+# NOTE on how to use UIC to convert .ui to .py:
+# pyuic5 LimiterTest_0_2.ui -o LimiterTest_0_2.py
 
 class AppWindow(Ui_LimiterTest):
     def __init__(self, window):
@@ -14,23 +17,47 @@ class AppWindow(Ui_LimiterTest):
         self.window = window
         self.add_connections()
         self.window.show()
+        self.check_checkboxes()
+
+    def check_checkboxes(self):
+        """ Checks the checkbox status """
+        self.set_editable_ps1()
+        self.set_editable_ps2()
+        self.set_editable_sg1()
+        self.set_editable_sg2()
 
     def set_editable_sg1(self):
         """ Enables/Disables Editable Parameters based on Using Equipment"""
-        if self.cb_useSigGen.isChecked:
+        if self.cb_useSigGen.isChecked():
             editable = True
         else:
             editable = False
-        pass
+        self.e_SigGenGPIB_2.setEnabled(editable)
+        self.e_startFreq.setEnabled(editable)
+        self.e_stopFreq.setEnabled(editable)
+        self.e_stepFreq.setEnabled(editable)
+        self.e_startPower.setEnabled(editable)
+        self.e_stopPower.setEnabled(editable)
+        self.e_stepPower.setEnabled(editable)
 
     def set_editable_sg2(self):
-        """ Enables/Disables Editable Parameters based on Using Equipment"""
-        pass
+        """ Enables/Disables Signal Generator 2 Parameters based on checkbox """
+        if self.cb_useSigGen_2.isChecked():
+            editable = True
+        else:
+            editable = False
+        self.e_SigGenGPIB_2.setEnabled(editable)
+        self.e_startFreq_2.setEnabled(editable)
+        self.e_stopFreq_2.setEnabled(editable)
+        self.e_stepFreq_2.setEnabled(editable)
+        self.e_startPower_2.setEnabled(editable)
+        self.e_stopPower_2.setEnabled(editable)
+        self.e_stepPower_2.setEnabled(editable)
 
     def set_editable_ps1(self):
         """ Enables/Disables Editable Parameters based on Using Equipment"""
         print("setting ps1 enables")
-        if self.cb_usePoweSupply.isChecked():
+        if self.cb_usePowerSupply.isChecked():
             editable = True
         else:
             editable = False
@@ -41,8 +68,15 @@ class AppWindow(Ui_LimiterTest):
         self.e_psuStepV.setEnabled(editable)
 
     def set_editable_ps2(self):
-        """ Enables/Disables Editable Parameters based on Using Equipment"""
-        pass
+        """ Enables/Disables the Editable parameters for PS2 based on checkbox """
+        if self.cb_usePowerSupply_2.isChecked():
+            editable = True
+        else:
+            editable = False
+        self.e_psuGPIB_2.setEnabled(editable)
+        self.e_psuStartV_2.setEnabled(editable)
+        self.e_psuStopV_2.setEnabled(editable)
+        self.e_psuStepV_2.setEnabled(editable)
 
     def add_connections(self):
         """ Links the fields of the gui to test equipment attributes """
@@ -50,8 +84,8 @@ class AppWindow(Ui_LimiterTest):
         # Handles greying out boxes not to be used.
         self.cb_useSigGen.clicked.connect(self.set_editable_sg1)
         self.cb_useSigGen_2.clicked.connect(self.set_editable_sg2)
-        self.cb_usePoweSupply.clicked.connect(self.set_editable_ps1)
-        self.cb_usePoweSupply_2.clicked.connect(self.set_editable_ps2)
+        self.cb_usePowerSupply.clicked.connect(self.set_editable_ps1)
+        self.cb_usePowerSupply_2.clicked.connect(self.set_editable_ps2)
 
         self.b_exit.clicked.connect(self.close)
 

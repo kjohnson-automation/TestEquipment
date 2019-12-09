@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'LimiterTest_0_1.ui'
+# Form implementation generated from reading ui file 'LimiterTest_0_2.ui'
 #
 # Created by: PyQt5 UI code generator 5.13.0
 #
@@ -178,9 +178,9 @@ class Ui_LimiterTest(object):
         self.w_psu = QtWidgets.QWidget(self.centralwidget)
         self.w_psu.setGeometry(QtCore.QRect(500, 10, 271, 201))
         self.w_psu.setObjectName("w_psu")
-        self.cb_usePoweSupply = QtWidgets.QCheckBox(self.w_psu)
-        self.cb_usePoweSupply.setGeometry(QtCore.QRect(30, 10, 131, 21))
-        self.cb_usePoweSupply.setObjectName("cb_usePoweSupply")
+        self.cb_usePowerSupply = QtWidgets.QCheckBox(self.w_psu)
+        self.cb_usePowerSupply.setGeometry(QtCore.QRect(30, 10, 131, 21))
+        self.cb_usePowerSupply.setObjectName("cb_usePowerSupply")
         self.horizontalLayoutWidget_4 = QtWidgets.QWidget(self.w_psu)
         self.horizontalLayoutWidget_4.setGeometry(QtCore.QRect(30, 40, 211, 141))
         self.horizontalLayoutWidget_4.setObjectName("horizontalLayoutWidget_4")
@@ -220,9 +220,9 @@ class Ui_LimiterTest(object):
         self.w_psu_2 = QtWidgets.QWidget(self.centralwidget)
         self.w_psu_2.setGeometry(QtCore.QRect(790, 10, 271, 201))
         self.w_psu_2.setObjectName("w_psu_2")
-        self.cb_usePoweSupply_2 = QtWidgets.QCheckBox(self.w_psu_2)
-        self.cb_usePoweSupply_2.setGeometry(QtCore.QRect(30, 10, 131, 21))
-        self.cb_usePoweSupply_2.setObjectName("cb_usePoweSupply_2")
+        self.cb_usePowerSupply_2 = QtWidgets.QCheckBox(self.w_psu_2)
+        self.cb_usePowerSupply_2.setGeometry(QtCore.QRect(30, 10, 131, 21))
+        self.cb_usePowerSupply_2.setObjectName("cb_usePowerSupply_2")
         self.horizontalLayoutWidget_6 = QtWidgets.QWidget(self.w_psu_2)
         self.horizontalLayoutWidget_6.setGeometry(QtCore.QRect(30, 40, 211, 141))
         self.horizontalLayoutWidget_6.setObjectName("horizontalLayoutWidget_6")
@@ -312,7 +312,7 @@ class Ui_LimiterTest(object):
         self.horizontalLayout_8.addWidget(self.b_startTest)
         LimiterTest.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(LimiterTest)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1579, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1579, 26))
         self.menubar.setObjectName("menubar")
         self.menuLimiter_Test_Gui = QtWidgets.QMenu(self.menubar)
         self.menuLimiter_Test_Gui.setObjectName("menuLimiter_Test_Gui")
@@ -362,17 +362,18 @@ class Ui_LimiterTest(object):
         self.l_lotWafer.setText(_translate("LimiterTest", "Lot/Wafer:"))
         self.l_temp.setText(_translate("LimiterTest", "DUT Temp:"))
         self.l_testOperator.setText(_translate("LimiterTest", "Tester:"))
-        self.cb_usePoweSupply.setText(_translate("LimiterTest", "Use Power Supply"))
+        self.cb_usePowerSupply.setText(_translate("LimiterTest", "Use Power Supply"))
         self.l_psuGPIB.setText(_translate("LimiterTest", "GPIB Address:"))
         self.l_psuStartV.setText(_translate("LimiterTest", "Start Voltage:"))
         self.l_psuStopV.setText(_translate("LimiterTest", "Stop Voltage:"))
         self.l_psuStepV.setText(_translate("LimiterTest", "Step Voltage:"))
         self.e_psuGPIB.setText(_translate("LimiterTest", "6"))
-        self.cb_usePoweSupply_2.setText(_translate("LimiterTest", "Use Power Supply"))
+        self.cb_usePowerSupply_2.setText(_translate("LimiterTest", "Use Power Supply"))
         self.l_psuGPIB_2.setText(_translate("LimiterTest", "GPIB Address:"))
         self.l_psuStartV_2.setText(_translate("LimiterTest", "Start Voltage:"))
         self.l_psuStopV_2.setText(_translate("LimiterTest", "Stop Voltage:"))
         self.l_psuStepV_2.setText(_translate("LimiterTest", "Step Voltage:"))
+        self.e_psuGPIB_2.setText(_translate("LimiterTest", "5"))
         self.checkBox.setText(_translate("LimiterTest", "Manually Set Video/Resolution BW"))
         self.l_specAnalyzer.setText(_translate("LimiterTest", "Spectrum Analyzer GPIB:"))
         self.l_videoBW.setText(_translate("LimiterTest", "Video Bandwidth:"))
