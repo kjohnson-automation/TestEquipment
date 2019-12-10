@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_LimiterTest(object):
     def setupUi(self, LimiterTest):
         LimiterTest.setObjectName("LimiterTest")
-        LimiterTest.resize(1579, 970)
+        LimiterTest.resize(1580, 970)
         self.centralwidget = QtWidgets.QWidget(LimiterTest)
         self.centralwidget.setObjectName("centralwidget")
         self.w_sigGen = QtWidgets.QWidget(self.centralwidget)

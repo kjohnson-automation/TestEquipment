@@ -3,3 +3,4 @@ trunk/__pycache__/VisaHandler.cpython-37.pyc
 trunk/__pycache__/AgilentE4443.cpython-37.pyc
 *.csv
 *.pyc
+trunk/gui/_old/

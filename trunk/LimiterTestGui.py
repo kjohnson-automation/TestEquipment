@@ -2,10 +2,10 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow
 from PyQt5 import QtCore, QtGui
-from GUI.LimiterTest_0_2 import Ui_LimiterTest
+from gui.LimiterTest_0_2 import Ui_LimiterTest
 
 import Agilent8648, AgilentE36XX, AgilentE4443
-import LimiterTest
+from LimiterTestForGui import LimiterTest as Test
 
 # NOTE on how to use UIC to convert .ui to .py:
 # pyuic5 LimiterTest_0_2.ui -o LimiterTest_0_2.py
@@ -56,12 +56,10 @@ class AppWindow(Ui_LimiterTest):
 
     def set_editable_ps1(self):
         """ Enables/Disables Editable Parameters based on Using Equipment"""
-        print("setting ps1 enables")
         if self.cb_usePowerSupply.isChecked():
             editable = True
         else:
             editable = False
-        print("Editable: {0}".format(editable))
         self.e_psuGPIB.setEnabled(editable)
         self.e_psuStartV.setEnabled(editable)
         self.e_psuStopV.setEnabled(editable)
@@ -87,11 +85,19 @@ class AppWindow(Ui_LimiterTest):
         self.cb_usePowerSupply.clicked.connect(self.set_editable_ps1)
         self.cb_usePowerSupply_2.clicked.connect(self.set_editable_ps2)
 
+        self.b_startTest.clicked.connect(self.start_limiter_test)
         self.b_exit.clicked.connect(self.close)
+
+    def generate_kwargs(self):
+        """ Gathers available fields and creates the params dictionary with them for use in the limiter test """
+        return {}
+
 
     def start_limiter_test(self):
         """ this is where the magic will happend, it will pull in all fields from the gui and execute the limiter test """
-        limiter
+        params = self.generate_kwargs()
+        test = Test(kwargs=params)
+        test.test_OIP3()
 
     def close(self):
         print("User has exited")
@@ -101,7 +107,7 @@ def main():
     app = QApplication(sys.argv)
     window = QMainWindow()
     # dialog = QDialog()
-    LimiterTest = AppWindow(window)
+    w_LimiterTest = AppWindow(window)
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
