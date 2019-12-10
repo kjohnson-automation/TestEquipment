@@ -32,7 +32,7 @@ class AppWindow(Ui_LimiterTest):
             editable = True
         else:
             editable = False
-        self.e_SigGenGPIB_2.setEnabled(editable)
+        self.e_SigGenGPIB.setEnabled(editable)
         self.e_startFreq.setEnabled(editable)
         self.e_stopFreq.setEnabled(editable)
         self.e_stepFreq.setEnabled(editable)
