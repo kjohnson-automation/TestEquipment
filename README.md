@@ -55,6 +55,6 @@ as power supply.  Gui has full support 2 signal generators, 2 power supplies, an
 analyzer.
 
 To run:
-'''python
+```python
 python3 LimiterTestGui.py
-'''
+```
