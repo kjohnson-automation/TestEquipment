@@ -10,9 +10,13 @@ Limiter tests:
 		[-10dBm, -5dBm, 0dBm, +5dBm, +10dBm, +15dB]m
 """
 # Need to add GUI from Mac Windows
+import sys
 from datetime import datetime
 import time
 
+from frange import frange
+
+from AgilentE36XX import PowerSupply
 from Agilent8648 import SignalGenerator
 from AgilentE4443 import SpectrumAnalyzer
 
@@ -38,29 +42,72 @@ class LimiterTest():
 
         sa_gpib = kwargs.get("sa_gpib", None)
 
+        output_file = kwargs.get("output_file", None)
+
+        if siggen1_gpib is not None:
+            self.siggen1 = SignalGenerator(siggen1_gpib)
+            self.set_sg1_vars(kwargs=kwargs)
+        
+        if siggen2_gpib is not None:
+            self.siggen2 = SignalGenerator(siggen2_gpib)
+            self.set_sg2_vars(kwargs=kwargs)
+
+        if ps1_gpib is not None:
+            self.ps1 = PowerSupply(ps1_gpib)
+            self.set_ps1_vars(kwargs=kwargs)
+
+        if ps2_gpib is not None:
+            self.ps2 = PowerSupply(ps2_gpib)
+            self.set_ps2_vars()
+
+        if sa_gpib is None:
+            print("Spectrum Analyzer GPIB is not defined, it is required")
+            sys.exit("No Spectrum Analyzer GPIB defined")
+        self.spec_analyzer = SpectrumAnalyzer(sa_gpib)
+
         print(kwargs)
         input("Waiting here")
+
         if output_file is None:
             now = datetime.now().strftime("%m%d%Y_%H%M")
             output_file = "Limiter_test{0}.csv".format(now)
             print("Creating Write file: {0}".format(output_file))
             self.write_file = open(output_file, "w")
-        self.siggen1 = SignalGenerator(siggen1_gpib)
-        self.siggen2 = SignalGenerator(siggen2_gpib)
-        self.spec_analyzer = SpectrumAnalyzer(sa_gpib)
-        # edit_freq = input("Do you want to change the frequenices? (Y/N)")
-        # if "y" in edit_freq.lower():
-        #     self.frequency_pairs = []
-        #     response = ""
-        #     while "n" not in response:
-        #         response = input("Input frequency pairs - enter \"n\" to stop").split(",")
-        #         self.frequency_pairs.append(response)
-        # else:
 
         #### NOTE: EDIT FREQUENCIES HERE - FREQUENCIES IN GHz! ####
         self.frequency_pairs = [[2.395, 2.405], [2.995, 3.005]]
         self.power_levels = [-10, -5, 0, 5, 10, 15]
         ############################################################
+
+    def set_sg1_vars(self, **kwargs):
+        """ Sets the signal generator 1 freq and power values """
+        self.start_freq_1 = kwargs.get("sg1_start_f", None)
+        self.stop_freq_1 = kwargs.get("sg1_stop_f", None)
+        self.step_freq_1 = kwargs.get("sg1_step_f", None)
+        self.start_pow_1 = kwargs.get("sg1_start_p", None)
+        self.stop_pow_1 = kwargs.get("sg1_stop_p", None)
+        self.step_pow_1 = kwargs.get("sg1_step_p", None)
+
+    def set_sg2_vars(self, **kwargs):
+        """ Sets the signal generator 2 freq and power values """
+        self.start_freq_2 = kwargs.get("sg2_start_f", None)
+        self.stop_freq_2 = kwargs.get("sg2_stop_f", None)
+        self.step_freq_2 = kwargs.get("sg2_step_f", None)
+        self.start_pow_2 = kwargs.get("sg2_start_p", None)
+        self.stop_pow_2 = kwargs.get("sg2_stop_p", None)
+        self.step_pow_2 = kwargs.get("sg2_step_p", None)
+
+    def set_ps1_vars(self, **kwargs):
+        """ Sets the power supply 1 voltage values """
+        self.start_v_1 = kwargs.get("ps1_start_v", None)
+        self.stop_v_1 = kwargs.get("ps1_stop_v", None)
+        self.step_v_1 = kwargs.get("ps1_step_v", None)
+
+    def set_ps2_vars(self, **kwargs):
+        """ Sets the power supply 2 voltage values """
+        self.start_v_2 = kwargs.get("ps2_start_v", None)
+        self.stop_v_2 = kwargs.get("ps2_stop_v", None)
+        self.step_v_2 = kwargs.get("ps2_step_v", None)
 
     def close_file(self):
         """ Closes write file """
@@ -111,13 +158,19 @@ class LimiterTest():
         start_fail = self.spec_analyzer.set_start_freq(freq_pair[0]-.05)
         stop_fail = self.spec_analyzer.set_stop_freq(freq_pair[1]+.05)
         return any([start_fail, stop_fail])
+    
+    def map_freq_pairs(self):
+        """ maps the sets of frequencies to a list of lists [[1,2], [3,4], etc...] """
+        sg1_freqs = list(frange(self.start_freq_1, self.stop_freq_1, self.step_freq_1))
+        sg2_freqs = list(frange(self.start_freq_2, self.stop_freq_2, self.step_freq_2))
+        return list(zip(sg1_freqs, sg2_freqs))
 
     def test_OIP3(self):
         """ Tests the defined <self.frequency_pairs> and <self.power_levels>
             for OIP3 measurements and writes a csv file with data and plots
             results
         """
-
+        self.frequency_pairs = self.map_freq_pairs()
         # Diables siggen outputs before setting things - just in case
         self.disable_signal_output()
         self.spec_analyzer.set_reference_level(0)
