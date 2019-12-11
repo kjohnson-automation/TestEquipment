@@ -54,6 +54,7 @@ different lengths of frequency steps, power sweeps on both Tx signal generator p
 as power supply.  Gui has full support 2 signal generators, 2 power supplies, and a spectrum
 analyzer.
 
-To run: '''python
+To run:
+'''python
 python3 LimiterTestGui.py
 '''
