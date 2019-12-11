@@ -9,6 +9,7 @@ Libraries that will be used and therefore need to be installed (continually upda
 - scipy
 - pyvisa
 - matplotlib
+- PyQt5
 
 To install these packages, using terminal/cmd:
 - `pip install <library>`
@@ -18,6 +19,8 @@ This library will be used to control and number of pieces of equipment.
 Current supported library with explicit functionality:
 - Agilent E4443; Spectrum Analyzer
 - Agilent 8648; Signal Generator
+- Agilent E36XX; Power Supply
+- Visa Handler currently only supports GPIB devices
 
 Current library also supports any base visa device through VisaHandler
 There is currently a base test for testing limiters included.
@@ -44,3 +47,13 @@ if tx_power != desired_power:
 if sig_gen.get_output_state() != 1:
     sig_gen.set_output_state(1) #if power is not enabled, turns tx on
 ```
+
+Adding support for GUI use, development is ongoing - created a separate test file for use
+with it.  Need to refactor it to accept a different set of variables.  Need to handle
+different lengths of frequency steps, power sweeps on both Tx signal generator power as well
+as power supply.  Gui has full support 2 signal generators, 2 power supplies, and a spectrum
+analyzer.
+
+To run: '''python
+python3 LimiterTestGui.py
+'''
