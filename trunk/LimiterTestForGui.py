@@ -25,6 +25,7 @@ class LimiterTest():
     def __init__(self, **kwargs):
         """ Configures all test instance requirements:
             Expected/Valid kwargs:
+            p_no, lot, temp, tester
             sg1_gpib, sg2_gbib, ps1_gbib, ps2_gpib, sa_gpib
             sg1_start_f, sg1_stop_f, sg1_step_f, sg1_start_p, sg1_stop_p, sg1_step_p
             sg2 ...
@@ -34,13 +35,21 @@ class LimiterTest():
             output_file
         """
         # If output file is None: test will be saved as Limiter_test{date}.csv
+        kwargs = kwargs["kwargs"]
         siggen1_gpib = kwargs.get("sg1_gpib", None)
+        print("sg1_gpib: {0}".format(siggen1_gpib))
+        
         siggen2_gpib = kwargs.get("sg2_gpib", None)
+        print("sg2_gpib: {0}".format(siggen2_gpib))
 
         ps1_gpib = kwargs.get("ps1_gpib", None)
+        print("ps1_gpib: {0}".format(ps1_gpib))
+
         ps2_gpib = kwargs.get("ps2_gpib", None)
+        print("ps2_gpib: {0}".format(ps2_gpib))
 
         sa_gpib = kwargs.get("sa_gpib", None)
+        print("sa_gpib: {0}".format(sa_gpib))
 
         output_file = kwargs.get("output_file", None)
 
@@ -65,8 +74,7 @@ class LimiterTest():
             sys.exit("No Spectrum Analyzer GPIB defined")
         self.spec_analyzer = SpectrumAnalyzer(sa_gpib)
 
-        print(kwargs)
-        input("Waiting here")
+        self.set_sa_vars(kwargs=kwargs)
 
         if output_file is None:
             now = datetime.now().strftime("%m%d%Y_%H%M")
@@ -74,40 +82,63 @@ class LimiterTest():
             print("Creating Write file: {0}".format(output_file))
             self.write_file = open(output_file, "w")
 
+        self.write_test_info(kwargs=kwargs)
+
         #### NOTE: EDIT FREQUENCIES HERE - FREQUENCIES IN GHz! ####
-        self.frequency_pairs = [[2.395, 2.405], [2.995, 3.005]]
-        self.power_levels = [-10, -5, 0, 5, 10, 15]
+        # self.frequency_pairs = [[2.395, 2.405], [2.995, 3.005]]
+        # self.power_levels = [-10, -5, 0, 5, 10, 15]
         ############################################################
+
+    def write_test_info(self, **kwargs):
+        """ Writes the base test info to the text file on line 1, csv """
+        #p_no, lot, temp, tester
+        kwargs = kwargs["kwargs"]
+        part_no = kwargs.get("p_no", None)
+        lot = kwargs.get("lot", None)
+        temp = kwargs.get("temp", None)
+        tester = kwargs.get("tester", None)
+        self.write_file.write("Part Number, {0}, Lot, {1}, Temp, {2}, Tester, {3}\n".format(part_no, lot, temp, tester))
 
     def set_sg1_vars(self, **kwargs):
         """ Sets the signal generator 1 freq and power values """
-        self.start_freq_1 = kwargs.get("sg1_start_f", None)
-        self.stop_freq_1 = kwargs.get("sg1_stop_f", None)
-        self.step_freq_1 = kwargs.get("sg1_step_f", None)
-        self.start_pow_1 = kwargs.get("sg1_start_p", None)
-        self.stop_pow_1 = kwargs.get("sg1_stop_p", None)
-        self.step_pow_1 = kwargs.get("sg1_step_p", None)
+        kwargs = kwargs["kwargs"]
+        self.start_freq_1 = float(kwargs.get("sg1_start_f", None))
+        self.stop_freq_1 = float(kwargs.get("sg1_stop_f", None))
+        self.step_freq_1 = float(kwargs.get("sg1_step_f", None))
+        self.start_pow_1 = float(kwargs.get("sg1_start_p", None))
+        self.stop_pow_1 = float(kwargs.get("sg1_stop_p", None))
+        self.step_pow_1 = float(kwargs.get("sg1_step_p", None))
 
     def set_sg2_vars(self, **kwargs):
         """ Sets the signal generator 2 freq and power values """
-        self.start_freq_2 = kwargs.get("sg2_start_f", None)
-        self.stop_freq_2 = kwargs.get("sg2_stop_f", None)
-        self.step_freq_2 = kwargs.get("sg2_step_f", None)
-        self.start_pow_2 = kwargs.get("sg2_start_p", None)
-        self.stop_pow_2 = kwargs.get("sg2_stop_p", None)
-        self.step_pow_2 = kwargs.get("sg2_step_p", None)
+        kwargs = kwargs["kwargs"]
+        self.start_freq_2 = float(kwargs.get("sg2_start_f", None))
+        self.stop_freq_2 = float(kwargs.get("sg2_stop_f", None))
+        self.step_freq_2 = float(kwargs.get("sg2_step_f", None))
+        self.start_pow_2 = float(kwargs.get("sg2_start_p", None))
+        self.stop_pow_2 = float(kwargs.get("sg2_stop_p", None))
+        self.step_pow_2 = float(kwargs.get("sg2_step_p", None))
 
     def set_ps1_vars(self, **kwargs):
         """ Sets the power supply 1 voltage values """
+        kwargs = kwargs["kwargs"]
         self.start_v_1 = kwargs.get("ps1_start_v", None)
         self.stop_v_1 = kwargs.get("ps1_stop_v", None)
         self.step_v_1 = kwargs.get("ps1_step_v", None)
 
     def set_ps2_vars(self, **kwargs):
         """ Sets the power supply 2 voltage values """
+        kwargs = kwargs["kwargs"]
         self.start_v_2 = kwargs.get("ps2_start_v", None)
         self.stop_v_2 = kwargs.get("ps2_stop_v", None)
         self.step_v_2 = kwargs.get("ps2_step_v", None)
+
+    def set_sa_vars(self, **kwargs):
+        """ Sets the spectrum analyzer values """
+        kwargs = kwargs["kwargs"]
+        # NOTE: Not used right now
+        self.video_bw = kwargs.get("sa_vb", None)
+        self.res_bw = kwargs.get("sa_rb", None)
 
     def close_file(self):
         """ Closes write file """
@@ -165,17 +196,25 @@ class LimiterTest():
         sg2_freqs = list(frange(self.start_freq_2, self.stop_freq_2, self.step_freq_2))
         return list(zip(sg1_freqs, sg2_freqs))
 
+    def map_power_levels(self):
+        """ creates the power level ranges - only based on signal generator 1 right now """
+        power_levels = list(frange(self.start_pow_1, self.stop_pow_1, self.step_pow_1))
+        return power_levels
+
     def test_OIP3(self):
         """ Tests the defined <self.frequency_pairs> and <self.power_levels>
             for OIP3 measurements and writes a csv file with data and plots
             results
         """
-        self.frequency_pairs = self.map_freq_pairs()
+        frequency_pairs = self.map_freq_pairs()
+        print(frequency_pairs)
+        power_levels = self.map_power_levels()
+        print(power_levels)
         # Diables siggen outputs before setting things - just in case
         self.disable_signal_output()
         self.spec_analyzer.set_reference_level(0)
-        for freq_pair in self.frequency_pairs:
-            for power in self.power_levels:
+        for freq_pair in frequency_pairs:
+            for power in power_levels:
                 print("Testing frequencies: {0} - {1}".format(
                     freq_pair[0], freq_pair[1]))
                 print("Power Level: {0}dBm".format(power))
@@ -197,20 +236,10 @@ class LimiterTest():
                 self.write_sweep_data([x, y])
                 label = "{0}-{1} @ {2}dBm".format(freq_pair[0],
                         freq_pair[1], power)
-                self.spec_analyzer.plot_sweep_data([x,y], label)
+                # self.spec_analyzer.plot_sweep_data([x,y], label)
                 self.disable_signal_output()
         print("Testing Complete")
         print("Data File: {0}".format(self.write_file))
         self.close_file()
-        _ = input("Any Key To Continue...")
+        return self.write_file
 
-def main():
-    """ Main routine that starts the testing """
-    base_elements = {"sg1_gpib":19, "sg2_gpbi":21, "sa_gpib":18}
-    # test= LimiterTest()
-    test = LimiterTest(kwargs=base_elements)
-    print("Starting OIP3 Test")
-    test.test_OIP3()
-
-if __name__=="__main__":
-    main()
