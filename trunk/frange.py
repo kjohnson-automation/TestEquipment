@@ -11,9 +11,9 @@ def frange(start, stop=None, step=None):
         step = 1.0
 
     while True:
-        if step > 0 and start >= stop:
+        if step > 0 and start > stop:
             break
-        elif step < 0 and start <= stop:
+        elif step < 0 and start < stop:
             break
-        yield ("%g" % start) # return float number
+        yield (start) # return float number
         start = start + step
