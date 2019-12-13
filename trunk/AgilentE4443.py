@@ -2,6 +2,8 @@
 import time
 from VisaHandler import Visa_Device
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasAgg as FigureCanvasAgg
+from matplotlib.figure import Figure
 
 class SpectrumAnalyzer(Visa_Device):
     """ Creates Visa_Device SpectrumAnalyzer """
