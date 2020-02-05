@@ -1,0 +1,53 @@
+On Dec 20, 2019, 10:23 AM -0500, Douglas Johnson <doug.johnson@innovationedge.solutions>, wrote:  
+Hi Kevin,
+ 
+Below are my suggestions for the SA settings.  I also included a section for using a pre-amp and handling measuring amplifiers.
+We can do one thing at a time.  Let me know what you think.
+ 
+Thanks,
+Dad
+ 
+ 
+SA Settings for OIP3
+ 
+I measured 2 tones going directly into the SA (isolators on each generator.  Adjusted Atten, Res and Video BW's, averaging 
+to get a readable measurement and no SA distortion.  Settings are below:
+ 
+F1 and F2 are X MHz apart, default is 5MHz
+Measure F1 and F2, adjust each for desired power level.  Note, this will only be done at the lowest power level. Measure 
+and adjusted powers are Pf1 and Pf2 in dBm.
+
+Reference Level = Pf1 +10dB
+Attenuation Level = Pf1 + 20dB, note the attenuator has 2dB steps so sometimes it will be 1dB off, should be OK.
+ 
+Resolution BW = 300KHz - fixed
+Video BW = 1KHz - fixed
+Averaging = 16 - fixed
+Span = 50MHz - fixed
+ 
+So basically the input power into the receiver portion of the SA will be set to ~ -20dBm, the input power minus the
+attenuation.  Since the Attenuation level = Pf1 + 20 it will increase as the input power increases and keep the power
+into the receiver portion of the SA at -20dBm +/-1 due to the 2dB step in the attenuators. Obvoiusly the attenuator
+can’t go negative so it’s minimum is 0dB.  I some cases it might default to higher (like 6dB).
+
+With these settings I was able to measure a system OIP3 = 49dBm, not bad.  This should be good enough since we aren't
+measuring Line Amps.
+
+Tested at 2.4GHz and 3GHz.
+ 
+Adding an amplifier to increase Pin (Pout).
+ 
+Easiest  way to handle this is to have a box labeled Pre-Amp, default can be 0dB. Have the program add this gain to the
+expected output power of the generator.  Note, to improve gen to gen isolation isolators will be used in all cases were
+we have isolators for that frequency. Assume 1dB loss, splitter will have 3.5 to 4dB loss.  Maybe add another box for
+expected input loss.  This way you take the generator set output power, subtract the input loss, and then add the
+amplifier gain to set the input power.  This is referenced for parts specified by their input power (limiters, switches,
+mixers).  For the most part amplifiers are specified by their output power.  For that we would need expected DUT gain
+box and then add that to the number above.  Should also add output loss (loss between the DUT and the SA).
+
+In summary, add 4 input boxes:
+Input loss
+Pre-Amp Gain
+DUT Gain
+Output Loss (between DUT and SA)
+ 
