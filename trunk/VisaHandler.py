@@ -18,7 +18,7 @@ class Visa_Device():
         resource = None
 
         for resource in AVAILABLE_RESOURCES:
-            if "::{gpib_address}::".format(gpib_address=gpib_address)  in resource:
+            if "::{gpib_address}::".format(gpib_address=gpib_address) in resource:
                 self.resource = resource
                 break
         if resource is None:
@@ -115,6 +115,7 @@ class Visa_Device():
         try:
             return float(num)
         except ValueError:
+            print("Could not return numeric type for {0}".format(num))
             return num
 
     def _conversion(self, conv):

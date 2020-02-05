@@ -30,14 +30,6 @@ class LimiterTest():
         self.siggen1 = SignalGenerator(siggen1_gpib)
         self.siggen2 = SignalGenerator(siggen2_gpib)
         self.spec_analyzer = SpectrumAnalyzer(sa_gpib)
-        # edit_freq = input("Do you want to change the frequenices? (Y/N)")
-        # if "y" in edit_freq.lower():
-        #     self.frequency_pairs = []
-        #     response = ""
-        #     while "n" not in response:
-        #         response = input("Input frequency pairs - enter \"n\" to stop").split(",")
-        #         self.frequency_pairs.append(response)
-        # else:
 
         #### NOTE: EDIT FREQUENCIES HERE - FREQUENCIES IN GHz! ####
         self.frequency_pairs = [[2.395, 2.405], [2.995, 3.005]]
