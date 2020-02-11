@@ -14,7 +14,7 @@ import sys
 from datetime import datetime
 import time
 
-from frange import frange
+from common.frange import frange
 
 from AgilentE36XX import PowerSupply
 from Agilent8648 import SignalGenerator

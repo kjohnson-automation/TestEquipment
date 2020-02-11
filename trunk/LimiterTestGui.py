@@ -1,15 +1,18 @@
 # This file will link all the functions from the limiterTest to useful things in the actual back end.
 import sys
 import time
+# pylint: disable=no-name-in-module
 from PyQt5.QtWidgets import QApplication, QDialog, QMainWindow
 from PyQt5 import QtCore, QtGui
+# NOTE: Need to keep this up to date. May be worth writing a
+# a linker script that does base linking from gui buttons to features
 from gui.LimiterTest_0_5_test import Ui_LimiterTest
 
 import Agilent8648, AgilentE36XX, AgilentE4443
 from LimiterTestForGui import LimiterTest as Test
 
 # NOTE on how to use UIC to convert .ui to .py:
-# pyuic5 LimiterTest_0_2.ui -o LimiterTest_0_2.py
+# pyuic5 LimiterTest_0_x.ui -o LimiterTest_0_x.py
 
 class AppWindow(Ui_LimiterTest):
     def __init__(self):
@@ -207,6 +210,22 @@ class AppWindow(Ui_LimiterTest):
         #######################################
         returned_kwargs.update(self.get_spectrum_analyzer_params())
         return returned_kwargs
+
+    def generic_field_update(self, fields):
+        """ Updates <fields> from UI view for getting data """
+        if not isinstance(fields, list):
+            fields = [fields]
+        for field in fields:
+            try:
+                field = getattr(self, field)
+            except NameError:
+                print("No attribute {0}".format(field))
+                continue
+            try:
+                field.update()
+            except AttributeError:
+                print("Failed to update {0}".format(field))
+                continue
 
     def plot_file(self, file_location):
         """ Prints the plot data in the gui """
